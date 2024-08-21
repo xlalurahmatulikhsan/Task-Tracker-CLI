@@ -1,12 +1,14 @@
-const fs = require('fs');
-const path = './tasks.json';
+const fs = require('fs'); // Import the 'fs' module for file system operations.
+const path = './tasks.json'; // Define the path to the JSON file that will store tasks.
 
+// Function to initialize the tasks file if it does not exist.
 function initializeTasks() {
   if (!fs.existsSync(path)) {
     fs.writeFileSync(path, JSON.stringify([]));
   }
 }
 
+// Function to add a new task.
 function addTask(description) {
   const tasks = JSON.parse(fs.readFileSync(path));
   const now = new Date().toISOString();
@@ -24,6 +26,7 @@ function addTask(description) {
   console.log('Task added:', description);
 }
 
+// Function to update the description of a task by its ID.
 function updateTask(id, description) {
   const tasks = JSON.parse(fs.readFileSync(path));
   const task = tasks.find(t => t.id === id);
@@ -38,6 +41,7 @@ function updateTask(id, description) {
   }
 }
 
+// Function to update the status of a task by its ID.
 function updateTaskStatus(id, status) {
   const tasks = JSON.parse(fs.readFileSync(path));
   const task = tasks.find(t => t.id === id);
@@ -52,6 +56,7 @@ function updateTaskStatus(id, status) {
   }
 }
 
+// Function to delete a task by its ID.
 function deleteTask(id) {
   let tasks = JSON.parse(fs.readFileSync(path));
   tasks = tasks.filter(t => t.id !== id);
@@ -59,25 +64,29 @@ function deleteTask(id) {
   console.log('Task deleted:', id);
 }
 
+// Function to list all tasks.
 function listTasks() {
   const tasks = JSON.parse(fs.readFileSync(path));
   tasks.forEach(task => {
-    console.log(`${task.id}. ${task.description} [${task.status}] (Created at: ${task.createdAt}, Updated at: ${task.updatedAt})`);
+    console.log(`${task.id}. ${task.description} [${task.status}] (Created at: ${task.createdAt}, Updated at: ${task.updatedAt})`); 
   });
 }
 
+// Function to list tasks by a specific status.
 function listTasksByStatus(status) {
   const tasks = JSON.parse(fs.readFileSync(path));
   tasks.filter(task => task.status === status).forEach(task => {
-    console.log(`${task.id}. ${task.description} [${task.status}] (Created at: ${task.createdAt}, Updated at: ${task.updatedAt})`);
+    console.log(`${task.id}. ${task.description} [${task.status}] (Created at: ${task.createdAt}, Updated at: ${task.updatedAt})`); 
   });
 }
 
+// Initialize the tasks file if it doesn't exist.
 initializeTasks();
 
-const command = process.argv[2];
-const args = process.argv.slice(3);
+const command = process.argv[2]; // Command (e.g., 'add', 'update', 'delete', etc.)
+const args = process.argv.slice(3); // Arguments accompanying the command.
 
+// Switch case to determine which function to execute based on the provided command.
 switch (command) {
   case 'add':
     addTask(args.join(' '));
